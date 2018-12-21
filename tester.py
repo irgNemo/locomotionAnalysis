@@ -5,35 +5,29 @@ import Utilities;
 
 def main():
     print("Searching csv files");
-    paths = Utilities.get_csv_filenames("./todosLosAngulos", "**/*.csv");
-    print("Listing " + str(len(paths)) + " files \n");
+    directory_path = "./todosLosAngulos";
+    file_searching_pattern = "**/*.csv";
+    paths = Utilities.get_csv_filenames(directory_path, file_searching_pattern);
+    db_path = "locomotionAnalysis.db";
+    #print("Listing " + str(len(paths)) + " files \n");
+    
     input_list = [];
+    # Create object Input based on csv files
     for path in paths:
         input_obj = Input(str(path));
         input_obj.compute_metadata();
         input_list.append(input_obj);
 
-    #print_filename_list(input_list);
-    #print("----------------------------------");
-    #print_segment_list(input_list);
-    print("----------------------------------");
-    print_subject_list(input_list);
+    # Insert steps into db
+    for input_obj in input_list:
+        print(input_obj.get_path());
+        input_obj.insert_steps_into_db(db_path);
+        print("------------------------------");
 
-def print_filename_list(file_obj_list):
-    for file_obj in file_obj_list:
-        print(file_obj.get_path());
-
-def print_segment_list(obj_list):
+def print_obj_list(obj_list):
     for obj in obj_list:
-        print(obj.get_segment());
+        print(obj.get_data_position());
 
-def print_subject_list(obj_list):
-    for obj in obj_list:
-        print(obj.get_subject_ids());
-
-def print_condition_list(obj_list):
-    for obj in obj_list:
-        print(obj.get_segment());
 
 if __name__ == '__main__':
     main();
