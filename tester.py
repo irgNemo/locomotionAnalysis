@@ -17,12 +17,17 @@ def main():
         input_obj = Input(str(path));
         input_obj.compute_metadata();
         input_list.append(input_obj);
-
+    
+    input_obj = input_list[0];
+    print(input_obj.get_path());
+    input_obj.insert_steps_into_db(db_path);
+    print("------------------------------");
+    
     # Insert steps into db
-    for input_obj in input_list:
-        print(input_obj.get_path());
-        input_obj.insert_steps_into_db(db_path);
-        print("------------------------------");
+    #for input_obj in input_list:
+    #    print(input_obj.get_path());
+    #    input_obj.insert_steps_into_db(db_path);
+    #    print("------------------------------");
 
 def print_obj_list(obj_list):
     for obj in obj_list:

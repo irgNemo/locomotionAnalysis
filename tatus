@@ -1,0 +1,29 @@
+[33mcommit fc94941bd4f39df978227ab0b4f8860a9291df98[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: Israel Roman <israel.roman@cucei.udg.mx>
+Date:   Fri Dec 21 16:59:02 2018 -0600
+
+    Varios cambios
+
+[33mcommit 5c308d2832425b89225f7ec0815e8528674c86bc[m
+Author: Israel Roman <israel.roman@cucei.udg.mx>
+Date:   Thu Dec 20 08:36:28 2018 -0600
+
+    Change name directory from io to IO
+    
+    Creates file exploration module for all function to explore file data structure
+    
+    modify file PenduloDerecho.csv to remove tilde e
+    
+    Create database locomotionAnalysis.db and a script to create it
+
+[33mcommit 0cb4e4ca31bcf8f55a8a2584371c1aa2f4d6339d[m
+Author: Israel Roman <israel.roman@cucei.udg.mx>
+Date:   Mon Dec 17 17:52:11 2018 -0600
+
+    Adding files to be analyzed in todosLosAngulos folder
+
+[33mcommit 0b60530e6807a365532cd56d7aae8e3378f64557[m
+Author: Israel Roman <israel.roman@cucei.udg.mx>
+Date:   Fri Dec 14 22:34:49 2018 -0600
+
+    Creating readme

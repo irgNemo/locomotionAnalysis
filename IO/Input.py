@@ -21,9 +21,9 @@ class Input:
     def compute_metadata(self):
         self.set_subject_ids([]);
         with open(self.get_path()) as csv_file:
-            for cnt, line in enumerate(csv_file):
-                if cnt == 3:
-                    break;
+            line = csv_file.readline();
+            cnt = 0;
+            while line:
                 if cnt == 0:
                     self.set_segment(re.search("(\w|\s)+", line, UNICODE).group(0));
                     match_obj = re.search('(control)?\s*([\s+\w+]+)', line.lower(), UNICODE);
@@ -48,21 +48,42 @@ class Input:
                 if cnt == 2:
                     step_list = re.findall('[a-zA-Z]+\s+([0-9]+)',line);
                     self.set_step_number(step_list);
-            self.set_data_position(csv_file.tell());
+                    self.set_data_position(csv_file.tell());
+                    break;
+                line = csv_file.readline();
+                cnt += 1;
 
     def insert_steps_into_db(self, db_path_name):
         Input.db_connection = self.get_connection(db_path_name);
         cursor = Input.db_connection.cursor();
-        for cnt,step in enumerate(self.get_step_number()):
-            segment = self.get_segment();
-            subject = self.get_subject_ids()[cnt];
-            treatment = self.get_treatment()[cnt];
-            time_elapsed = self.get_time_elapsed()[cnt] if self.get_time_elapsed()[cnt] else '';
-            status = self.get_status();
-            angle = None;
-            insert_tuple = (segment, subject, treatment, time_elapsed, step, angle, status);
-            insert_statement = 'INSERT INTO step (id_segment, id_subject, id_treatment, time_elapsed, step_number, angle, status) values (?,?,?,?,?,?,?)' + str(insert_tuple)
-            print(insert_statement);
+        with open(self.get_path()) as cvs_file:
+            cvs_file.seek(self.get_data_position());
+            for line in cvs_file:
+                subject_cnt = -1;
+                treatment_cnt = -1; 
+                elapsed_time_cnt = -1;
+                for cnt,angle in enumerate(line.strip().split(',')):
+                    if (self.get_status() == 'control'):
+                        if (cnt % 3) == 0:
+                            subject_cnt += 1;
+                            elapsed_time_cnt +=1;
+                            treatment_cnt += 1;
+                        elif (self.get_status() == 'altered'):
+                            if (cnt % 6) == 0:
+                                subject_cnt += 1;
+                                elapsed_time_cnt += 1;
+                                treatment_cnt += 1;
+                    segment = self.get_segment();
+                    subject = self.get_subject_ids()[subject_cnt];
+                    treatment = self.get_treatment()[treatment_cnt];
+                    time_elapsed = self.get_time_elapsed()[elapsed_time_cnt];
+                    status = self.get_status();
+                    step = self.get_step_number()[cnt];
+                    insert_tuple = (segment, subject, treatment, time_elapsed, step, angle, status);
+                    insert_statement = 'INSERT INTO step (id_segment, id_subject, id_treatment, time_elapsed, step_number, angle, status) values (?,?,?,?,?,?,?)' + str(insert_tuple)
+                    print(insert_statement);
+             #print(self.get_status(), cnt, subject_cnt, treatment_cnt, elapsed_time_cnt);
+
 
     def get_connection(self, db_path_name):
         if not Input.db_connection:
